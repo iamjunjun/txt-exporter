@@ -1,9 +1,9 @@
 {
   "id": "txt-exporter",
   "name": "TXT Exporter",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "minAppVersion": "1.5.0",
-  "description": "右键文件或文件夹导出为纯文本文件，支持保留目录层级 | Right-click a file or folder to export as plain text, with optional directory hierarchy preservation",
+  "description": "右键文件或文件夹导出为纯文本文件，支持保留目录层级和去除 HTML 标签 | Right-click a file or folder to export as plain text, with optional directory hierarchy preservation and HTML tag stripping",
   "author": "Lin Jun",
   "authorUrl": "https://github.com/iamjunjun",
   "isDesktopOnly": true

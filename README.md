@@ -37,6 +37,10 @@ vault/杜十娘/
 
 **打开开关** → 导出到 `target/杜十娘/楔子.txt`、`target/杜十娘/第一章.txt`、`target/杜十娘/第二章/第3集.txt`、`target/杜十娘/第二章/第4集.txt`（保留子目录）
 
+### v0.2.1 修复：去除 HTML 标签
+
+之前导出时 inline HTML 标签会保留下来（比如 `<font style="color:#DF2A3F;">红色</font>`）。现在 `去除 markdown 标记` 开关打开后，会自动去除所有 HTML 标签（保留文字内容），并把 `<br>` 变换行。
+
 ### 安装
 
 #### 方式 1：Obsidian 社区插件市场（推荐）
@@ -116,6 +120,10 @@ vault/杜十娘/
 **Toggle off** → exports to `target/杜十娘/楔子.txt`, `target/杜十娘/第一章.txt`, `target/杜十娘/第3集.txt`, `target/杜十娘/第4集.txt` (flattened)
 
 **Toggle on** → exports to `target/杜十娘/楔子.txt`, `target/杜十娘/第一章.txt`, `target/杜十娘/第二章/第3集.txt`, `target/杜十娘/第二章/第4集.txt` (hierarchy preserved)
+
+### v0.2.1 fix: strip HTML tags
+
+Previously, inline HTML tags (e.g. `<font style="color:#DF2A3F;">red</font>`) were passed through to the exported TXT. Now, when **Strip markdown** is on, all HTML tags are removed (text content preserved), and `<br>` is converted to a newline.
 
 ### Installation
 

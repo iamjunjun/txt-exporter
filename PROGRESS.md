@@ -63,7 +63,17 @@ esbuild 配置:   30 行
 
 ## 变更日志
 
-### 2026-06-17
+### 2026-06-18 (cont.)
+
+- **fix**: 去除 inline HTML 标签（v0.2.1）
+  - `stripMarkdown` 增加了 `.replace(/<br\s*\/?>/gi, '\n')` 和 `.replace(/<[^>]+>/g, '')`
+  - 修复林君报告的 `<font style="color:#DF2A3F;">` 残留问题
+  - 同步把 `<span>`、`<mark>`、`<center>` 等也去了
+- **chore**: 升级到 v0.2.1（manifest.json + versions.json）
+
+### 2026-06-18
+
+- **feat**: 新增 "保留目录层级" 开关（v0.2.0）
 
 - **init**: 项目立项。完成骨架、依赖、首次 build、首次 commit。
 - **feat**: 新增 3 个内容处理开关（设置面板 → TXT Exporter）

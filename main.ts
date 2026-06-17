@@ -87,6 +87,8 @@ export default class TxtExporterPlugin extends Plugin {
     return md
       .replace(/```[\s\S]*?```/g, '')                      // 代码块
       .replace(/`([^`]+)`/g, '$1')                          // 行内代码
+      .replace(/<br\s*\/?>/gi, '\n')                        // <br> → 换行
+      .replace(/<[^>]+>/g, '')                              // 其他 HTML 标签（<font color>、<span>、<mark> 等）
       .replace(/!\[[^\]]*\]\([^)]*\)/g, '')                 // 图片
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')              // 链接
       .replace(/^#+\s*/gm, '')                              // 标题
