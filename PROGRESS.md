@@ -36,13 +36,11 @@
 
 ### 待办
 
-- [ ] 启动 `npm run dev` 持续重打包，验证热重载
-- [ ] 装到 vault 实际测试右键菜单（需林君提供 vault 路径或手动 `cp`）
-- [ ] 决定是否要加以下开关：
-  - 是否去除 frontmatter
-  - 是否去除 markdown 标记（标题、链接、图片等）
-  - 是否段间无空行（紧凑模式）
-- [ ] 决定是否推 GitHub（`gh` CLI 已配，账号 `iamjunjun`，可一条命令 `gh repo create`）
+- [x] ~~启动 `npm run dev` 持续重打包~~ ✅
+- [x] ~~装到 vault 实际测试右键菜单~~ ✅
+- [x] ~~加 3 个开关~~ ✅
+- [ ] **在 Obsidian 里实际测一次右键菜单**（林君操作）
+- [ ] 决定是否推 GitHub（`gh` CLI 已配，账号 `iamjunjun`）
 - [ ] 决定是否发布到 Obsidian 社区插件市场
 - [ ] 写最小单元测试（可选）
 
@@ -64,3 +62,11 @@ esbuild 配置:   30 行
 ### 2026-06-17
 
 - **init**: 项目立项。完成骨架、依赖、首次 build、首次 commit。
+- **feat**: 新增 3 个内容处理开关（设置面板 → TXT Exporter）
+  - 去除 frontmatter（默认开）
+  - 去除 markdown 标记（默认开）
+  - 段间无空行 / 紧凑（默认开）
+  - 新增 `ExportSettings` 接口、`PluginSettingTab` 子类、`processContent` / `stripMarkdown` 工具方法
+- **chore**: 装到 vault `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/.obsidian/plugins/txt-exporter/`
+- **chore**: 启动 `npm run dev` 后台监听（PID 34451），改 `main.ts` 自动重打包
+- **chore**: 决定暂不推 GitHub、暂不发布社区插件市场
