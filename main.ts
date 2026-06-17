@@ -4,15 +4,17 @@ import * as path from 'path';
 import { remote } from 'electron';
 
 interface ExportSettings {
-  stripFrontmatter: boolean;  // 去除 YAML 头部
-  stripMarkdown: boolean;     // 去除 markdown 格式符号
-  compact: boolean;           // 段间无空行（紧凑）
+  stripFrontmatter: boolean;    // 去除 YAML 头部
+  stripMarkdown: boolean;       // 去除 markdown 格式符号
+  compact: boolean;             // 段间无空行（紧凑）
+  preserveHierarchy: boolean;   // 保留 vault 原目录层级
 }
 
 const DEFAULT_SETTINGS: ExportSettings = {
   stripFrontmatter: true,
   stripMarkdown: true,
   compact: true,
+  preserveHierarchy: false,
 };
 
 export default class TxtExporterPlugin extends Plugin {
@@ -132,11 +134,24 @@ export default class TxtExporterPlugin extends Plugin {
     // 写入
     for (const f of mdFiles) {
       const content = this.processContent(await this.app.vault.cachedRead(f));
-      const outPath = path.join(subDir, `${f.basename}.txt`);
+
+      let outPath: string;
+      if (this.settings.preserveHierarchy) {
+        // 保留 vault 原层级：计算相对 folder 路径
+        const rel = f.path.substring(folder.path.length + 1);
+        const relDir = path.dirname(rel);
+        const outDir = relDir === '.' ? subDir : path.join(subDir, relDir);
+        await fs.promises.mkdir(outDir, { recursive: true });
+        outPath = path.join(outDir, `${f.basename}.txt`);
+      } else {
+        // 平铺
+        outPath = path.join(subDir, `${f.basename}.txt`);
+      }
+
       await fs.promises.writeFile(outPath, content, 'utf-8');
     }
 
-    new Notice(`已导出 ${mdFiles.length} 个文件 → ${folder.name}/`);
+    new Notice(`已导出 ${mdFiles.length} 个文件 → ${folder.name}/${this.settings.preserveHierarchy ? '（保留层级）' : ''}`);
   }
 }
 
@@ -185,6 +200,16 @@ class TxtExporterSettingTab extends PluginSettingTab {
         .setValue(this.plugin.settings.compact)
         .onChange(async (value) => {
           this.plugin.settings.compact = value;
+          await this.plugin.saveSettings();
+        }));
+
+    new Setting(containerEl)
+      .setName('保留目录层级')
+      .setDesc('打开后保留原 vault 的子目录结构（默认所有笔记平铺到同名子目录）')
+      .addToggle(toggle => toggle
+        .setValue(this.plugin.settings.preserveHierarchy)
+        .onChange(async (value) => {
+          this.plugin.settings.preserveHierarchy = value;
           await this.plugin.saveSettings();
         }));
   }

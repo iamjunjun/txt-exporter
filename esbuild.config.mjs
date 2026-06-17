@@ -32,8 +32,9 @@ const ctx = await esbuild.context({
       build.onEnd((result) => {
         if (result.errors.length === 0) {
           try {
-            execSync(`cp main.js "${VAULT_PLUGIN_DIR}/main.js"`, { stdio: 'inherit' });
-            console.log(`[auto-deploy] ✓ main.js → ${VAULT_PLUGIN_DIR}/main.js`);
+            // 同步 main.js 和 manifest.json
+            execSync(`cp main.js manifest.json "${VAULT_PLUGIN_DIR}/"`, { stdio: 'inherit' });
+            console.log(`[auto-deploy] ✓ main.js + manifest.json → ${VAULT_PLUGIN_DIR}/`);
           } catch (e) {
             console.error('[auto-deploy] ✗ 复制失败:', e.message);
           }

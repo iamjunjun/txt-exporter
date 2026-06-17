@@ -24,19 +24,19 @@
 
 | 决策点 | 选择 | 理由 |
 |---|---|---|
-| 触发方式 | 右键菜单（`file-menu` event） | 比命令面板直观 |
-| 目录选择 | Electron `dialog.showOpenDialog` | 系统原生，桌面端可用 |
-| 输出位置 | 任意外部目录（不限制在 vault 内） | 用户需要把 txt 拿出去用（TTS、配音等） |
-| 文件夹处理 | 递归所有子目录，输出到同名子目录 | 林君原话：“导出的地方也是用同样名字的文件夹” |
-| 内容处理 | 不动 frontmatter、不动 markdown 标记、不动空行 | 林君没要求处理，最简单 |
-| 同名冲突 | 直接覆盖，不弹提示 | 一次导出任务内冲突罕见 |
-| 仓库 | 暂做本地，不推 GitHub | 林君改主意：“先不 git 了或者本地仓库” |
-| 测试 | 暂不装到 vault | 林君：“我不想装到 vault 测试可以吗” |
-| 节点协议 | 桌面专属（`isDesktopOnly: true`） | 用了 `electron` API，移动端跑不了 |
+| 触发方式 | 右键菜单(`file-menu` event) | 比命令面板直观 |
+| 目录选择 | Electron `dialog.showOpenDialog` | 系统原生,桌面端可用 |
+| 输出位置 | 任意外部目录(不限制在 vault 内) | 用户需要把 txt 拿出去用(TTS、配音等) |
+| 文件夹处理 | 递归所有子目录,输出到同名子目录 | 林君原话:"导出的地方也是用同样名字的文件夹" |
+| 内容处理 | 不动 frontmatter、不动 markdown 标记、不动空行 | 林君没要求处理,最简单 |
+| 同名冲突 | 直接覆盖,不弹提示 | 一次导出任务内冲突罕见 |
+| 仓库 | 暂做本地,不推 GitHub | 林君改主意:"先不 git 了或者本地仓库" |
+| 测试 | 暂不装到 vault | 林君:"我不想装到 vault 测试可以吗" |
+| 节点协议 | 桌面专属(`isDesktopOnly: true`) | 用了 `electron` API,移动端跑不了 |
 | 作者名 | `Lin Jun` | 林君选择 |
 | GitHub 仓库名 | `txt-exporter` | 林君选择 |
-| 语言 | 中英双语（双标签并列，不是 i18n 动态切换） | 过度设计不必要，双标签最简 |
-| 社区插件市场 PR | 我代发 | 林君不会，手动复杂 |
+| 语言 | 中英双语(双标签并列,不是 i18n 动态切换) | 过度设计不必要,双标签最简 |
+| 社区插件市场 PR | 我代发 | 林君不会,手动复杂 |
 
 ### 待办
 
@@ -66,11 +66,23 @@ esbuild 配置:   30 行
 ### 2026-06-17
 
 - **init**: 项目立项。完成骨架、依赖、首次 build、首次 commit。
-- **feat**: 新增 3 个内容处理开关(设置面板 → TXT Exporter)
-  - 去除 frontmatter(默认开)
-  - 去除 markdown 标记(默认开)
-  - 段间无空行 / 紧凑(默认开)
+- **feat**: 新增 3 个内容处理开关（设置面板 → TXT Exporter）
+  - 去除 frontmatter（默认开）
+  - 去除 markdown 标记（默认开）
+  - 段间无空行 / 紧凑（默认开）
   - 新增 `ExportSettings` 接口、`PluginSettingTab` 子类、`processContent` / `stripMarkdown` 工具方法
 - **chore**: 装到 vault `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/.obsidian/plugins/txt-exporter/`
-- **chore**: 启动 `npm run dev` 后台监听(PID 34451),改 `main.ts` 自动重打包
+- **chore**: 启动 `npm run dev` 后台监听（PID 34451），改 `main.ts` 自动重打包
 - **chore**: 决定暂不推 GitHub、暂不发布社区插件市场
+
+### 2026-06-18
+
+- **feat**: 新增 "保留目录层级" 开关（v0.2.0）
+  - `preserveHierarchy: boolean`，默认 false（保持 v0.1.0 平铺行为）
+  - 打开后导出文件夹时保留 vault 原子目录结构
+  - 例子：选中 `杜十娘` 导出，开关开 → `target/杜十娘/第二章/第3集.txt`（保留子目录）
+- **feat**: 升级到 v0.2.0（`manifest.json` + `versions.json`）
+- **chore**: esbuild auto-deploy 同步 manifest.json（之前只 deploy main.js，林君手动 cp 过一次）
+- **chore**: README 加 v0.2.0 新功能说明（中英双语）
+- **chore**: 推 GitHub + 发 v0.2.0 release
+- **chore**: 社区插件市场 PR 仍待林君浏览器点（API 权限问题）

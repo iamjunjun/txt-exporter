@@ -15,6 +15,28 @@ Obsidian 插件：右键 `.md` 文件或文件夹，导出为纯文本 `.txt`。
 - 非 `.md` 文件不显示此菜单项
 - 同名 `.txt` 直接覆盖
 
+### v0.2.0 新增：保留目录层级
+
+设置里有一个"保留目录层级"开关。
+
+- **关闭（默认）**：所有 `.txt` 平铺到同名子目录里（v0.1.0 的行为）
+- **打开**：保留 vault 原有的子目录结构，每个文件按原相对路径导出
+
+例子：选中 vault 里的 `杜十娘` 文件夹导出：
+
+```
+vault/杜十娘/
+├── 楔子.md
+├── 第一章.md
+└── 第二章/
+    ├── 第3集.md
+    └── 第4集.md
+```
+
+**关闭开关** → 导出到 `target/杜十娘/楔子.txt`、`target/杜十娘/第一章.txt`、`target/杜十娘/第3集.txt`、`target/杜十娘/第4集.txt`（平铺）
+
+**打开开关** → 导出到 `target/杜十娘/楔子.txt`、`target/杜十娘/第一章.txt`、`target/杜十娘/第二章/第3集.txt`、`target/杜十娘/第二章/第4集.txt`（保留子目录）
+
 ### 安装
 
 #### 方式 1：Obsidian 社区插件市场（推荐）
@@ -43,6 +65,7 @@ cp main.js manifest.json "$PLUGIN_DIR"
 | 去除 frontmatter | ✅ | 移除 YAML 头部元数据（`--- ... ---`） |
 | 去除 markdown 标记 | ✅ | 去掉 `#` 标题、`**粗体**`、`[]()` 链接等格式符号 |
 | 段间无空行（紧凑） | ✅ | 段落之间不留空行，每个段落单独一行 |
+| 保留目录层级 | ❌ | 导出文件夹时保留 vault 原子目录结构（默认平铺） |
 
 ### 使用
 
@@ -72,6 +95,28 @@ Obsidian plugin: right-click a `.md` file or folder to export as plain text `.tx
 - Non-`.md` files do not show this menu item
 - Same-name `.txt` files are overwritten
 
+### v0.2.0 new: preserve directory hierarchy
+
+A "Preserve directory hierarchy" toggle is available in settings.
+
+- **Off (default)**: all `.txt` files are flattened into the same-name subfolder (v0.1.0 behavior)
+- **On**: original subdirectory structure is preserved; each file is exported at its original relative path
+
+Example: exporting the vault folder `杜十娘`:
+
+```
+vault/杜十娘/
+├── 楔子.md
+├── 第一章.md
+└── 第二章/
+    ├── 第3集.md
+    └── 第4集.md
+```
+
+**Toggle off** → exports to `target/杜十娘/楔子.txt`, `target/杜十娘/第一章.txt`, `target/杜十娘/第3集.txt`, `target/杜十娘/第4集.txt` (flattened)
+
+**Toggle on** → exports to `target/杜十娘/楔子.txt`, `target/杜十娘/第一章.txt`, `target/杜十娘/第二章/第3集.txt`, `target/杜十娘/第二章/第4集.txt` (hierarchy preserved)
+
 ### Installation
 
 #### Option 1: Obsidian Community Plugin Store (recommended)
@@ -100,6 +145,7 @@ Settings → Community plugins → TXT Exporter → Options:
 | Strip frontmatter | ✅ | Remove YAML frontmatter (`--- ... ---`) |
 | Strip markdown | ✅ | Remove `#` headings, `**bold**`, `[]()` links, etc. |
 | Compact (no blank lines between paragraphs) | ✅ | Collapse blank lines between paragraphs |
+| Preserve directory hierarchy | ❌ | When exporting a folder, preserve vault's subdirectory structure (default: flatten) |
 
 ### Usage
 
