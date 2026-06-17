@@ -3,7 +3,8 @@
   "name": "TXT Exporter",
   "version": "0.1.0",
   "minAppVersion": "1.5.0",
-  "description": "右键文件/文件夹导出为 TXT",
-  "author": "林君",
+  "description": "右键文件或文件夹导出为纯文本文件 | Right-click a file or folder to export as plain text",
+  "author": "Lin Jun",
+  "authorUrl": "https://github.com/iamjunjun",
   "isDesktopOnly": true
 }

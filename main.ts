@@ -30,7 +30,7 @@ export default class TxtExporterPlugin extends Plugin {
 
         menu.addItem(item =>
           item
-            .setTitle('导出为 TXT')
+            .setTitle('导出为 TXT | Export to TXT')
             .setIcon('file-text')
             .onClick(async () => {
               if (file instanceof TFile) await this.exportFile(file);
