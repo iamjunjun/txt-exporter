@@ -65,6 +65,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': '段落之间不留空行，每个段落单独一行',
     'settings.preserveHierarchy.name': '保留目录层级',
     'settings.preserveHierarchy.desc': '打开后保留原 vault 的子目录结构（默认所有笔记平铺到同名子目录）',
+    'dialog.conflictSingle': '{name} 已存在',
+    'dialog.conflictMultiple': '目标文件夹已包含 {count} 个同名文件',
+    'dialog.overwrite': '覆盖',
+    'dialog.skip': '跳过',
+    'dialog.cancel': '取消',
   },
 
   en: {
@@ -81,6 +86,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Collapse blank lines between paragraphs; one paragraph per line.',
     'settings.preserveHierarchy.name': 'Preserve directory hierarchy',
     'settings.preserveHierarchy.desc': "Preserve the vault's subdirectory structure on export (default: flatten all notes into the same-name subfolder).",
+    'dialog.conflictSingle': '{name} already exists',
+    'dialog.conflictMultiple': 'Destination folder already contains {count} files with the same name',
+    'dialog.overwrite': 'Overwrite',
+    'dialog.skip': 'Skip',
+    'dialog.cancel': 'Cancel',
   },
 
   ja: {
@@ -97,6 +107,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': '段落間の空行を取り除き、1 段落 1 行にまとめます。',
     'settings.preserveHierarchy.name': 'ディレクトリ階層を保持',
     'settings.preserveHierarchy.desc': 'エクスポート時に vault のサブディレクトリ構造を保持します（デフォルト：同名サブフォルダへフラット化）。',
+    'dialog.conflictSingle': '{name} は既に存在します',
+    'dialog.conflictMultiple': '対象フォルダに同名のファイルが {count} 個含まれています',
+    'dialog.overwrite': '上書き',
+    'dialog.skip': 'スキップ',
+    'dialog.cancel': 'キャンセル',
   },
 
   ko: {
@@ -113,6 +128,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': '단락 사이의 빈 줄을 제거하고 한 단락을 한 줄로 만듭니다.',
     'settings.preserveHierarchy.name': '디렉터리 계층 유지',
     'settings.preserveHierarchy.desc': '내보낼 때 vault의 하위 디렉터리 구조를 유지합니다 (기본값: 모든 노트를 동명의 하위 폴더에 평탄화).',
+    'dialog.conflictSingle': '{name}이(가) 이미 존재합니다',
+    'dialog.conflictMultiple': '대상 폴더에 같은 이름의 파일이 {count}개 있습니다',
+    'dialog.overwrite': '덮어쓰기',
+    'dialog.skip': '건너뛰기',
+    'dialog.cancel': '취소',
   },
 
   de: {
@@ -129,6 +149,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Leerzeilen zwischen Absätzen entfernen; ein Absatz pro Zeile.',
     'settings.preserveHierarchy.name': 'Verzeichnishierarchie beibehalten',
     'settings.preserveHierarchy.desc': 'Beim Export die Unterverzeichnisstruktur des Vaults beibehalten (Standard: alle Notizen in den gleichnamigen Unterordner abflachen).',
+    'dialog.conflictSingle': '{name} existiert bereits',
+    'dialog.conflictMultiple': 'Zielordner enthält bereits {count} Dateien mit demselben Namen',
+    'dialog.overwrite': 'Überschreiben',
+    'dialog.skip': 'Überspringen',
+    'dialog.cancel': 'Abbrechen',
   },
 
   fr: {
@@ -145,6 +170,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Supprime les lignes vides entre paragraphes ; un paragraphe par ligne.',
     'settings.preserveHierarchy.name': 'Conserver la hiérarchie des dossiers',
     'settings.preserveHierarchy.desc': "Conserve la structure des sous-dossiers du coffre lors de l'export (par défaut : tout aplatir dans le sous-dossier du même nom).",
+    'dialog.conflictSingle': '{name} existe déjà',
+    'dialog.conflictMultiple': 'Le dossier de destination contient déjà {count} fichiers avec le même nom',
+    'dialog.overwrite': 'Écraser',
+    'dialog.skip': 'Ignorer',
+    'dialog.cancel': 'Annuler',
   },
 
   es: {
@@ -161,6 +191,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Elimina las líneas en blanco entre párrafos; un párrafo por línea.',
     'settings.preserveHierarchy.name': 'Conservar jerarquía de directorios',
     'settings.preserveHierarchy.desc': 'Conserva la estructura de subdirectorios del vault al exportar (por defecto: aplana todas las notas en el subdirectorio del mismo nombre).',
+    'dialog.conflictSingle': '{name} ya existe',
+    'dialog.conflictMultiple': 'La carpeta de destino ya contiene {count} archivos con el mismo nombre',
+    'dialog.overwrite': 'Sobrescribir',
+    'dialog.skip': 'Omitir',
+    'dialog.cancel': 'Cancelar',
   },
 
   pt: {
@@ -177,6 +212,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Remove linhas em branco entre parágrafos; um parágrafo por linha.',
     'settings.preserveHierarchy.name': 'Manter hierarquia de diretórios',
     'settings.preserveHierarchy.desc': 'Mantém a estrutura de subdiretórios do vault ao exportar (predefinição: nivelar todas as notas na subpasta do mesmo nome).',
+    'dialog.conflictSingle': '{name} já existe',
+    'dialog.conflictMultiple': 'A pasta de destino já contém {count} ficheiros com o mesmo nome',
+    'dialog.overwrite': 'Substituir',
+    'dialog.skip': 'Ignorar',
+    'dialog.cancel': 'Cancelar',
   },
 
   it: {
@@ -193,6 +233,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Rimuove le righe vuote tra i paragrafi; un paragrafo per riga.',
     'settings.preserveHierarchy.name': 'Mantieni gerarchia delle cartelle',
     'settings.preserveHierarchy.desc': "Mantiene la struttura delle sottocartelle del vault durante l'esportazione (predefinito: appiattisce tutte le note nella sottocartella con lo stesso nome).",
+    'dialog.conflictSingle': '{name} esiste già',
+    'dialog.conflictMultiple': 'La cartella di destinazione contiene già {count} file con lo stesso nome',
+    'dialog.overwrite': 'Sovrascrivi',
+    'dialog.skip': 'Ignora',
+    'dialog.cancel': 'Annulla',
   },
 
   th: {
@@ -209,6 +254,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'ลบบรรทัดว่างระหว่างย่อหน้า หนึ่งย่อหน้าต่อหนึ่งบรรทัด',
     'settings.preserveHierarchy.name': 'รักษาโครงสร้างไดเรกทอรี',
     'settings.preserveHierarchy.desc': 'รักษาโครงสร้างไดเรกทอรีย่อยของ vault เมื่อส่งออก (ค่าเริ่มต้น: แผ่ออกเป็นโฟลเดอร์ย่อยที่มีชื่อเดียวกัน)',
+    'dialog.conflictSingle': '{name} มีอยู่แล้ว',
+    'dialog.conflictMultiple': 'โฟลเดอร์ปลายทางมีไฟล์ชื่อเดียวกันอยู่ {count} ไฟล์',
+    'dialog.overwrite': 'เขียนทับ',
+    'dialog.skip': 'ข้าม',
+    'dialog.cancel': 'ยกเลิก',
   },
 
   vi: {
@@ -225,6 +275,11 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Bỏ các dòng trống giữa các đoạn; một đoạn trên một dòng.',
     'settings.preserveHierarchy.name': 'Giữ cấu trúc thư mục',
     'settings.preserveHierarchy.desc': 'Giữ cấu trúc thư mục con của vault khi xuất (mặc định: dàn phẳng tất cả ghi chú vào thư mục con cùng tên).',
+    'dialog.conflictSingle': '{name} đã tồn tại',
+    'dialog.conflictMultiple': 'Thư mục đích đã chứa {count} tệp có cùng tên',
+    'dialog.overwrite': 'Ghi đè',
+    'dialog.skip': 'Bỏ qua',
+    'dialog.cancel': 'Hủy',
   },
 
 };

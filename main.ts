@@ -123,8 +123,28 @@ export default class TxtExporterPlugin extends Plugin {
     const target = await this.pickFolder();
     if (!target) return;
 
-    const content = this.processContent(await this.app.vault.cachedRead(file));
     const outPath = path.join(target, `${file.basename}.txt`);
+
+    // 同名冲突检查
+    if (fs.existsSync(outPath)) {
+      const t = this.i18n.t.bind(this.i18n);
+      const result = await remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          type: 'warning',
+          title: 'TXT Exporter',
+          message: t('dialog.conflictSingle', { name: `${file.basename}.txt` }),
+          detail: outPath,
+          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.cancel')],
+          defaultId: 1,
+          cancelId: 2,
+        }
+      );
+      if (result.response === 2) return; // 取消
+      if (result.response === 1) return; // 跳过
+    }
+
+    const content = this.processContent(await this.app.vault.cachedRead(file));
     await fs.promises.writeFile(outPath, content, 'utf-8');
     new Notice(this.i18n.t('notice.exportedFile', { name: `${file.basename}.txt` }));
   }
@@ -150,33 +170,66 @@ export default class TxtExporterPlugin extends Plugin {
     };
     const mdFiles = collect(folder);
 
-    // 写入
+    // 预计算所有输出路径
+    const fileMap: { file: TFile; outPath: string }[] = [];
     for (const f of mdFiles) {
-      const content = this.processContent(await this.app.vault.cachedRead(f));
-
       let outPath: string;
       if (this.settings.preserveHierarchy) {
-        // 保留 vault 原层级：计算相对 folder 路径
         const rel = f.path.substring(folder.path.length + 1);
         const relDir = path.dirname(rel);
         const outDir = relDir === '.' ? subDir : path.join(subDir, relDir);
         await fs.promises.mkdir(outDir, { recursive: true });
         outPath = path.join(outDir, `${f.basename}.txt`);
       } else {
-        // 平铺
         outPath = path.join(subDir, `${f.basename}.txt`);
       }
+      fileMap.push({ file: f, outPath });
+    }
 
+    // 同名冲突检查
+    const conflicts = fileMap.filter(({ outPath }) => fs.existsSync(outPath));
+    if (conflicts.length > 0) {
+      const t = this.i18n.t.bind(this.i18n);
+      const result = await remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          type: 'warning',
+          title: 'TXT Exporter',
+          message: t('dialog.conflictMultiple', { count: conflicts.length }),
+          detail: conflicts.map(({ file }) => `${file.basename}.txt`).join('\n'),
+          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.cancel')],
+          defaultId: 1,
+          cancelId: 2,
+        }
+      );
+      if (result.response === 2) return; // 取消
+      if (result.response === 1) {
+        // 跳过冲突文件，只导出非冲突的
+        const toExport = fileMap.filter(({ outPath }) => !fs.existsSync(outPath));
+        for (const { file, outPath } of toExport) {
+          const content = this.processContent(await this.app.vault.cachedRead(file));
+          await fs.promises.writeFile(outPath, content, 'utf-8');
+        }
+        const suffix = this.settings.preserveHierarchy
+          ? this.i18n.t('suffix.preserveHierarchy') : '';
+        new Notice(this.i18n.t('notice.exportedFolder', {
+          count: toExport.length, folder: folder.name, suffix,
+        }));
+        return;
+      }
+      // result.response === 0: 覆盖全部，继续
+    }
+
+    // 导出所有文件
+    for (const { file, outPath } of fileMap) {
+      const content = this.processContent(await this.app.vault.cachedRead(file));
       await fs.promises.writeFile(outPath, content, 'utf-8');
     }
 
     const suffix = this.settings.preserveHierarchy
-      ? this.i18n.t('suffix.preserveHierarchy')
-      : '';
+      ? this.i18n.t('suffix.preserveHierarchy') : '';
     new Notice(this.i18n.t('notice.exportedFolder', {
-      count: mdFiles.length,
-      folder: folder.name,
-      suffix,
+      count: mdFiles.length, folder: folder.name, suffix,
     }));
   }
 }
