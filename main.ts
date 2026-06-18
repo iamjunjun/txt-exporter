@@ -59,10 +59,11 @@ export default class TxtExporterPlugin extends Plugin {
 
   // ---------- 工具方法 ----------
   async pickFolder(): Promise<string | null> {
-    const result = await remote.dialog.showOpenDialog(
-      remote.getCurrentWindow(),
-      { properties: ['openDirectory', 'createDirectory'] }
-    );
+    const result: { canceled: boolean; filePaths: string[] } =
+      await remote.dialog.showOpenDialog(
+        remote.getCurrentWindow(),
+        { properties: ['openDirectory', 'createDirectory'] }
+      );
     if (result.canceled || result.filePaths.length === 0) return null;
     return result.filePaths[0];
   }
@@ -89,7 +90,7 @@ export default class TxtExporterPlugin extends Plugin {
   stripMarkdown(md: string): string {
     // 1. 先把代码块内容提取出来保护，避免被后续 markdown 正则误处理
     const codeBlocks: string[] = [];
-    let s = md.replace(/```[\w]*\n([\s\S]*?)```/g, (_match, content) => {
+    let s = md.replace(/```[\w]*\n([\s\S]*?)```/g, (_match: string, content: string): string => {
       codeBlocks.push(content);
       return `\u0000CB${codeBlocks.length - 1}\u0000`;
     });
@@ -107,7 +108,7 @@ export default class TxtExporterPlugin extends Plugin {
       .replace(/\*([^*]+)\*/g, '$1')                        // 斜体
       .replace(/_([^_]+)_/g, '$1')
       .replace(/^>\s*/gm, '')                               // 引用
-      .replace(/^[\-\*]\s+/gm, '')                          // 无序列表
+      .replace(/^[-*]\s+/gm, '')                            // 无序列表
       .replace(/^\d+\.\s+/gm, '');                          // 有序列表
 
     // 3. 把代码块内容换回来
@@ -148,7 +149,7 @@ export default class TxtExporterPlugin extends Plugin {
     // 同名冲突检查
     if (fs.existsSync(outPath)) {
       const t = this.i18n.t.bind(this.i18n);
-      const result = await remote.dialog.showMessageBox(
+      const result: { response: number } = await remote.dialog.showMessageBox(
         remote.getCurrentWindow(),
         {
           type: 'warning',
@@ -167,7 +168,7 @@ export default class TxtExporterPlugin extends Plugin {
       // response === 0: 覆盖，继续
     }
 
-    const content = this.processContent(await this.app.vault.cachedRead(file));
+    const content: string = this.processContent(await this.app.vault.cachedRead(file));
     await fs.promises.writeFile(outPath, content, 'utf-8');
     new Notice(this.i18n.t('notice.exportedFile', { name: path.basename(outPath) }));
   }
@@ -181,7 +182,7 @@ export default class TxtExporterPlugin extends Plugin {
     // 文件夹整体冲突检查
     if (fs.existsSync(subDir)) {
       const t = this.i18n.t.bind(this.i18n);
-      const result = await remote.dialog.showMessageBox(
+      const result: { response: number } = await remote.dialog.showMessageBox(
         remote.getCurrentWindow(),
         {
           type: 'warning',
@@ -218,7 +219,7 @@ export default class TxtExporterPlugin extends Plugin {
 
     // 写入（选了"覆盖"则直接覆盖子文件，无需再检查冲突）
     for (const f of mdFiles) {
-      const content = this.processContent(await this.app.vault.cachedRead(f));
+      const content: string = this.processContent(await this.app.vault.cachedRead(f));
 
       let outPath: string;
       if (this.settings.preserveHierarchy) {
@@ -256,8 +257,8 @@ class TxtExporterSettingTab extends PluginSettingTab {
     const t = (key: string) => this.plugin.i18n.t(key);
     containerEl.empty();
 
-    containerEl.createEl('h2', { text: 'TXT Exporter' });
     containerEl.createEl('p', { text: t('settings.header') });
+    new Setting(containerEl).setName('TXT Exporter').setHeading();
 
     new Setting(containerEl)
       .setName(t('settings.stripFrontmatter.name'))
