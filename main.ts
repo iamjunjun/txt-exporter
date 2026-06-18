@@ -87,8 +87,15 @@ export default class TxtExporterPlugin extends Plugin {
 
   // 简易 markdown 剥离
   stripMarkdown(md: string): string {
-    return md
-      .replace(/^```[\w]*\s*$/gm, '')                      // 代码块：去掉 ``` 标记行，保留内容
+    // 1. 先把代码块内容提取出来保护，避免被后续 markdown 正则误处理
+    const codeBlocks: string[] = [];
+    let s = md.replace(/```[\w]*\n([\s\S]*?)```/g, (_match, content) => {
+      codeBlocks.push(content);
+      return `\u0000CB${codeBlocks.length - 1}\u0000`;
+    });
+
+    // 2. 处理其他 markdown
+    s = s
       .replace(/`([^`]+)`/g, '$1')                          // 行内代码
       .replace(/<br\s*\/?>/gi, '\n')                        // <br> → 换行
       .replace(/<[^>]+>/g, '')                              // 其他 HTML 标签（<font color>、<span>、<mark> 等）
@@ -102,6 +109,13 @@ export default class TxtExporterPlugin extends Plugin {
       .replace(/^>\s*/gm, '')                               // 引用
       .replace(/^[\-\*]\s+/gm, '')                          // 无序列表
       .replace(/^\d+\.\s+/gm, '');                          // 有序列表
+
+    // 3. 把代码块内容换回来
+    for (let i = 0; i < codeBlocks.length; i++) {
+      s = s.replace(`\u0000CB${i}\u0000`, codeBlocks[i]);
+    }
+
+    return s;
   }
 
   // ---------- 导出主流程 ----------
