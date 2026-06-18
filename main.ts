@@ -128,6 +128,16 @@ export default class TxtExporterPlugin extends Plugin {
     }
   }
 
+  // ---------- 工具：找下一个可用文件夹名 ----------
+  nextAvailableFolder(parentDir: string, basename: string): string {
+    let n = 1;
+    while (true) {
+      const candidate = path.join(parentDir, `${basename} (${n})`);
+      if (!fs.existsSync(candidate)) return candidate;
+      n++;
+    }
+  }
+
   // ---------- 导出主流程 ----------
   async exportFile(file: TFile) {
     const target = await this.pickFolder();
@@ -145,16 +155,16 @@ export default class TxtExporterPlugin extends Plugin {
           title: 'TXT Exporter',
           message: t('dialog.conflictSingle', { name: `${file.basename}.txt` }),
           detail: outPath,
-          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.rename'), t('dialog.cancel')],
-          defaultId: 2,
-          cancelId: 3,
+          buttons: [t('dialog.overwrite'), t('dialog.rename'), t('dialog.cancel')],
+          defaultId: 1,
+          cancelId: 2,
         }
       );
-      if (result.response === 3) return; // 取消
-      if (result.response === 1) return; // 跳过
-      if (result.response === 2) {       // 重命名
+      if (result.response === 2) return; // 取消
+      if (result.response === 1) {       // 重命名
         outPath = this.nextAvailablePath(target, file.basename, '.txt');
       }
+      // response === 0: 覆盖，继续
     }
 
     const content = this.processContent(await this.app.vault.cachedRead(file));
@@ -166,7 +176,30 @@ export default class TxtExporterPlugin extends Plugin {
     const target = await this.pickFolder();
     if (!target) return;
 
-    const subDir = path.join(target, folder.name);
+    let subDir = path.join(target, folder.name);
+
+    // 文件夹整体冲突检查
+    if (fs.existsSync(subDir)) {
+      const t = this.i18n.t.bind(this.i18n);
+      const result = await remote.dialog.showMessageBox(
+        remote.getCurrentWindow(),
+        {
+          type: 'warning',
+          title: 'TXT Exporter',
+          message: t('dialog.conflictFolder', { name: folder.name }),
+          detail: subDir,
+          buttons: [t('dialog.overwrite'), t('dialog.rename'), t('dialog.cancel')],
+          defaultId: 1,  // 重命名（最安全）
+          cancelId: 2,
+        }
+      );
+      if (result.response === 2) return; // 取消
+      if (result.response === 1) {       // 重命名整个文件夹
+        subDir = this.nextAvailableFolder(target, folder.name);
+      }
+      // response === 0: 覆盖，里面的同名文件直接覆盖
+    }
+
     await fs.promises.mkdir(subDir, { recursive: true });
 
     // 递归收集所有 .md
@@ -183,9 +216,10 @@ export default class TxtExporterPlugin extends Plugin {
     };
     const mdFiles = collect(folder);
 
-    // 预计算所有输出路径
-    const fileMap: { file: TFile; outPath: string }[] = [];
+    // 写入（选了"覆盖"则直接覆盖子文件，无需再检查冲突）
     for (const f of mdFiles) {
+      const content = this.processContent(await this.app.vault.cachedRead(f));
+
       let outPath: string;
       if (this.settings.preserveHierarchy) {
         const rel = f.path.substring(folder.path.length + 1);
@@ -196,66 +230,14 @@ export default class TxtExporterPlugin extends Plugin {
       } else {
         outPath = path.join(subDir, `${f.basename}.txt`);
       }
-      fileMap.push({ file: f, outPath });
-    }
 
-    // 同名冲突检查
-    const conflicts = fileMap.filter(({ outPath }) => fs.existsSync(outPath));
-    if (conflicts.length > 0) {
-      const t = this.i18n.t.bind(this.i18n);
-      const result = await remote.dialog.showMessageBox(
-        remote.getCurrentWindow(),
-        {
-          type: 'warning',
-          title: 'TXT Exporter',
-          message: t('dialog.conflictMultiple', { count: conflicts.length }),
-          detail: conflicts.map(({ file }) => `${file.basename}.txt`).join('\n'),
-          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.rename'), t('dialog.cancel')],
-          defaultId: 2,
-          cancelId: 3,
-        }
-      );
-      if (result.response === 3) return; // 取消
-      if (result.response === 1) {
-        // 跳过冲突文件，只导出非冲突的
-        const toExport = fileMap.filter(({ outPath }) => !fs.existsSync(outPath));
-        for (const { file, outPath } of toExport) {
-          const content = this.processContent(await this.app.vault.cachedRead(file));
-          await fs.promises.writeFile(outPath, content, 'utf-8');
-        }
-        const suffix = this.settings.preserveHierarchy
-          ? this.i18n.t('suffix.preserveHierarchy') : '';
-        new Notice(this.i18n.t('notice.exportedFolder', {
-          count: toExport.length, folder: folder.name, suffix,
-        }));
-        return;
-      }
-      if (result.response === 2) {
-        // 重命名所有冲突文件
-        for (let i = 0; i < fileMap.length; i++) {
-          const item = fileMap[i];
-          if (fs.existsSync(item.outPath)) {
-            item.outPath = this.nextAvailablePath(
-              path.dirname(item.outPath),
-              item.file.basename,
-              '.txt'
-            );
-          }
-        }
-      }
-      // result.response === 0: 覆盖全部，继续
-    }
-
-    // 导出所有文件
-    for (const { file, outPath } of fileMap) {
-      const content = this.processContent(await this.app.vault.cachedRead(file));
       await fs.promises.writeFile(outPath, content, 'utf-8');
     }
 
     const suffix = this.settings.preserveHierarchy
       ? this.i18n.t('suffix.preserveHierarchy') : '';
     new Notice(this.i18n.t('notice.exportedFolder', {
-      count: mdFiles.length, folder: folder.name, suffix,
+      count: mdFiles.length, folder: path.basename(subDir), suffix,
     }));
   }
 }
