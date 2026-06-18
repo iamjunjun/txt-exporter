@@ -43,8 +43,10 @@
 - [x] ~~启动 `npm run dev` 持续重打包~~ ✅
 - [x] ~~装到 vault 实际测试右键菜单~~ ✅
 - [x] ~~加 3 个开关~~ ✅
+- [x] ~~i18n 多语言支持~~ ✅（v0.3.0）
 - [ ] **在 Obsidian 里实际测一次右键菜单**(林君操作)
-- [ ] 决定是否推 GitHub(`gh` CLI 已配,账号 `iamjunjun`)
+- [ ] **切到阿拉伯语设置测一次 RTL 渲染**(林君操作)
+- [ ] 决定是否推 GitHub(`gh` CLI 已配,账号 `iamjunjun`)✅
 - [ ] 决定是否发布到 Obsidian 社区插件市场
 - [ ] 写最小单元测试(可选)
 
@@ -62,6 +64,18 @@ esbuild 配置:   30 行
 ---
 
 ## 变更日志
+
+### 2026-06-18 (cont.)
+
+- **feat**: i18n 多语言支持（v0.3.0）
+  - 新增 `i18n.ts`：根据 Obsidian 语言设置自动切换界面字符串
+  - 支持 12 语言：中文 / 英语 / 日语 / 韩语 / 德语 / 法语 / 西班牙语 / 葡萄牙语 / 阿拉伯语 / 意大利语 / 泰语 / 越南语
+  - 未列出的语言 fallback 到英语
+  - 阿拉伯语 RTL 处理：所有 ASCII 字面量（`TXT`、`YAML`、`#`、`**`等）和 vars（`{count}`、`{folder}`、`{name}`）手动加 LRM（U+200E）避免 BIDI 错乱
+  - 提升 `minAppVersion` 到 `1.8.7`（`getLanguage()` API 自 1.8.7 起可用）
+  - 翻译表内嵌编译进 `main.js`（不引入额外文件读取，无运行时依赖）
+  - 13 个翻译键：菜单 / Notice (×2) / suffix / 设置面板 header + 4 个开关 (×2)
+- **chore**: 升级到 v0.3.0（manifest.json + versions.json）
 
 ### 2026-06-18 (cont.)
 

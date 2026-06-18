@@ -2,6 +2,7 @@ import { App, Plugin, PluginSettingTab, Setting, TFile, TFolder, Notice } from '
 import * as fs from 'fs';
 import * as path from 'path';
 import { remote } from 'electron';
+import { I18n } from './i18n';
 
 interface ExportSettings {
   stripFrontmatter: boolean;    // 去除 YAML 头部
@@ -19,9 +20,11 @@ const DEFAULT_SETTINGS: ExportSettings = {
 
 export default class TxtExporterPlugin extends Plugin {
   settings: ExportSettings;
+  i18n: I18n;
 
   async onload() {
     await this.loadSettings();
+    this.i18n = new I18n();
 
     // 右键菜单：.md 文件 / 文件夹
     this.registerEvent(
@@ -32,7 +35,7 @@ export default class TxtExporterPlugin extends Plugin {
 
         menu.addItem(item =>
           item
-            .setTitle('导出为 TXT | Export to TXT')
+            .setTitle(this.i18n.t('menu.title'))
             .setIcon('file-text')
             .onClick(async () => {
               if (file instanceof TFile) await this.exportFile(file);
@@ -109,7 +112,7 @@ export default class TxtExporterPlugin extends Plugin {
     const content = this.processContent(await this.app.vault.cachedRead(file));
     const outPath = path.join(target, `${file.basename}.txt`);
     await fs.promises.writeFile(outPath, content, 'utf-8');
-    new Notice(`已导出：${file.basename}.txt`);
+    new Notice(this.i18n.t('notice.exportedFile', { name: `${file.basename}.txt` }));
   }
 
   async exportFolder(folder: TFolder) {
@@ -153,7 +156,14 @@ export default class TxtExporterPlugin extends Plugin {
       await fs.promises.writeFile(outPath, content, 'utf-8');
     }
 
-    new Notice(`已导出 ${mdFiles.length} 个文件 → ${folder.name}/${this.settings.preserveHierarchy ? '（保留层级）' : ''}`);
+    const suffix = this.settings.preserveHierarchy
+      ? this.i18n.t('suffix.preserveHierarchy')
+      : '';
+    new Notice(this.i18n.t('notice.exportedFolder', {
+      count: mdFiles.length,
+      folder: folder.name,
+      suffix,
+    }));
   }
 }
 
@@ -168,16 +178,15 @@ class TxtExporterSettingTab extends PluginSettingTab {
 
   display() {
     const { containerEl } = this;
+    const t = (key: string) => this.plugin.i18n.t(key);
     containerEl.empty();
 
     containerEl.createEl('h2', { text: 'TXT Exporter' });
-    containerEl.createEl('p', {
-      text: '配置导出 txt 时的内容处理。右键文件/文件夹即可触发导出。',
-    });
+    containerEl.createEl('p', { text: t('settings.header') });
 
     new Setting(containerEl)
-      .setName('去除 frontmatter')
-      .setDesc('导出时移除 YAML 头部元数据（--- ... ---）')
+      .setName(t('settings.stripFrontmatter.name'))
+      .setDesc(t('settings.stripFrontmatter.desc'))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.stripFrontmatter)
         .onChange(async (value) => {
@@ -186,8 +195,8 @@ class TxtExporterSettingTab extends PluginSettingTab {
         }));
 
     new Setting(containerEl)
-      .setName('去除 markdown 标记')
-      .setDesc('去掉 # 标题、**粗体**、[]() 链接等格式符号')
+      .setName(t('settings.stripMarkdown.name'))
+      .setDesc(t('settings.stripMarkdown.desc'))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.stripMarkdown)
         .onChange(async (value) => {
@@ -196,8 +205,8 @@ class TxtExporterSettingTab extends PluginSettingTab {
         }));
 
     new Setting(containerEl)
-      .setName('段间无空行（紧凑）')
-      .setDesc('段落之间不留空行，每个段落单独一行')
+      .setName(t('settings.compact.name'))
+      .setDesc(t('settings.compact.desc'))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.compact)
         .onChange(async (value) => {
@@ -206,8 +215,8 @@ class TxtExporterSettingTab extends PluginSettingTab {
         }));
 
     new Setting(containerEl)
-      .setName('保留目录层级')
-      .setDesc('打开后保留原 vault 的子目录结构（默认所有笔记平铺到同名子目录）')
+      .setName(t('settings.preserveHierarchy.name'))
+      .setDesc(t('settings.preserveHierarchy.desc'))
       .addToggle(toggle => toggle
         .setValue(this.plugin.settings.preserveHierarchy)
         .onChange(async (value) => {
