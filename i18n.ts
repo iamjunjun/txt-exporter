@@ -69,6 +69,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': '目标文件夹已包含 {count} 个同名文件',
     'dialog.overwrite': '覆盖',
     'dialog.skip': '跳过',
+    'dialog.rename': '重命名',
     'dialog.cancel': '取消',
   },
 
@@ -90,6 +91,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'Destination folder already contains {count} files with the same name',
     'dialog.overwrite': 'Overwrite',
     'dialog.skip': 'Skip',
+    'dialog.rename': 'Rename',
     'dialog.cancel': 'Cancel',
   },
 
@@ -111,6 +113,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': '対象フォルダに同名のファイルが {count} 個含まれています',
     'dialog.overwrite': '上書き',
     'dialog.skip': 'スキップ',
+    'dialog.rename': '名前変更',
     'dialog.cancel': 'キャンセル',
   },
 
@@ -132,6 +135,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': '대상 폴더에 같은 이름의 파일이 {count}개 있습니다',
     'dialog.overwrite': '덮어쓰기',
     'dialog.skip': '건너뛰기',
+    'dialog.rename': '이름 바꾸기',
     'dialog.cancel': '취소',
   },
 
@@ -153,6 +157,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'Zielordner enthält bereits {count} Dateien mit demselben Namen',
     'dialog.overwrite': 'Überschreiben',
     'dialog.skip': 'Überspringen',
+    'dialog.rename': 'Umbenennen',
     'dialog.cancel': 'Abbrechen',
   },
 
@@ -174,6 +179,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'Le dossier de destination contient déjà {count} fichiers avec le même nom',
     'dialog.overwrite': 'Écraser',
     'dialog.skip': 'Ignorer',
+    'dialog.rename': 'Renommer',
     'dialog.cancel': 'Annuler',
   },
 
@@ -195,6 +201,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'La carpeta de destino ya contiene {count} archivos con el mismo nombre',
     'dialog.overwrite': 'Sobrescribir',
     'dialog.skip': 'Omitir',
+    'dialog.rename': 'Renombrar',
     'dialog.cancel': 'Cancelar',
   },
 
@@ -216,6 +223,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'A pasta de destino já contém {count} ficheiros com o mesmo nome',
     'dialog.overwrite': 'Substituir',
     'dialog.skip': 'Ignorar',
+    'dialog.rename': 'Renomear',
     'dialog.cancel': 'Cancelar',
   },
 
@@ -237,6 +245,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'La cartella di destinazione contiene già {count} file con lo stesso nome',
     'dialog.overwrite': 'Sovrascrivi',
     'dialog.skip': 'Ignora',
+    'dialog.rename': 'Rinomina',
     'dialog.cancel': 'Annulla',
   },
 
@@ -258,6 +267,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'โฟลเดอร์ปลายทางมีไฟล์ชื่อเดียวกันอยู่ {count} ไฟล์',
     'dialog.overwrite': 'เขียนทับ',
     'dialog.skip': 'ข้าม',
+    'dialog.rename': 'เปลี่ยนชื่อ',
     'dialog.cancel': 'ยกเลิก',
   },
 
@@ -279,6 +289,7 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'dialog.conflictMultiple': 'Thư mục đích đã chứa {count} tệp có cùng tên',
     'dialog.overwrite': 'Ghi đè',
     'dialog.skip': 'Bỏ qua',
+    'dialog.rename': 'Đổi tên',
     'dialog.cancel': 'Hủy',
   },
 

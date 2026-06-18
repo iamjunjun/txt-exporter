@@ -118,12 +118,22 @@ export default class TxtExporterPlugin extends Plugin {
     return s;
   }
 
+  // ---------- 工具：找下一个可用文件名 ----------
+  nextAvailablePath(dir: string, basename: string, ext: string): string {
+    let n = 1;
+    while (true) {
+      const candidate = path.join(dir, `${basename} (${n})${ext}`);
+      if (!fs.existsSync(candidate)) return candidate;
+      n++;
+    }
+  }
+
   // ---------- 导出主流程 ----------
   async exportFile(file: TFile) {
     const target = await this.pickFolder();
     if (!target) return;
 
-    const outPath = path.join(target, `${file.basename}.txt`);
+    let outPath = path.join(target, `${file.basename}.txt`);
 
     // 同名冲突检查
     if (fs.existsSync(outPath)) {
@@ -135,18 +145,21 @@ export default class TxtExporterPlugin extends Plugin {
           title: 'TXT Exporter',
           message: t('dialog.conflictSingle', { name: `${file.basename}.txt` }),
           detail: outPath,
-          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.cancel')],
-          defaultId: 1,
-          cancelId: 2,
+          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.rename'), t('dialog.cancel')],
+          defaultId: 2,
+          cancelId: 3,
         }
       );
-      if (result.response === 2) return; // 取消
+      if (result.response === 3) return; // 取消
       if (result.response === 1) return; // 跳过
+      if (result.response === 2) {       // 重命名
+        outPath = this.nextAvailablePath(target, file.basename, '.txt');
+      }
     }
 
     const content = this.processContent(await this.app.vault.cachedRead(file));
     await fs.promises.writeFile(outPath, content, 'utf-8');
-    new Notice(this.i18n.t('notice.exportedFile', { name: `${file.basename}.txt` }));
+    new Notice(this.i18n.t('notice.exportedFile', { name: path.basename(outPath) }));
   }
 
   async exportFolder(folder: TFolder) {
@@ -197,12 +210,12 @@ export default class TxtExporterPlugin extends Plugin {
           title: 'TXT Exporter',
           message: t('dialog.conflictMultiple', { count: conflicts.length }),
           detail: conflicts.map(({ file }) => `${file.basename}.txt`).join('\n'),
-          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.cancel')],
-          defaultId: 1,
-          cancelId: 2,
+          buttons: [t('dialog.overwrite'), t('dialog.skip'), t('dialog.rename'), t('dialog.cancel')],
+          defaultId: 2,
+          cancelId: 3,
         }
       );
-      if (result.response === 2) return; // 取消
+      if (result.response === 3) return; // 取消
       if (result.response === 1) {
         // 跳过冲突文件，只导出非冲突的
         const toExport = fileMap.filter(({ outPath }) => !fs.existsSync(outPath));
@@ -216,6 +229,19 @@ export default class TxtExporterPlugin extends Plugin {
           count: toExport.length, folder: folder.name, suffix,
         }));
         return;
+      }
+      if (result.response === 2) {
+        // 重命名所有冲突文件
+        for (let i = 0; i < fileMap.length; i++) {
+          const item = fileMap[i];
+          if (fs.existsSync(item.outPath)) {
+            item.outPath = this.nextAvailablePath(
+              path.dirname(item.outPath),
+              item.file.basename,
+              '.txt'
+            );
+          }
+        }
       }
       // result.response === 0: 覆盖全部，继续
     }
