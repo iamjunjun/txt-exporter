@@ -7,11 +7,11 @@ import { getLanguage } from 'obsidian';
 
 export type Locale =
   | 'zh' | 'en' | 'ja' | 'ko' | 'de' | 'fr'
-  | 'es' | 'pt' | 'ar' | 'it' | 'th' | 'vi';
+  | 'es' | 'pt' | 'it' | 'th' | 'vi';
 
 const SUPPORTED: Locale[] = [
   'zh', 'en', 'ja', 'ko', 'de', 'fr',
-  'es', 'pt', 'ar', 'it', 'th', 'vi',
+  'es', 'pt', 'it', 'th', 'vi',
 ];
 
 // Obsidian 返回形如 'zh-cn' / 'en' / 'pt-br'，截前缀标准化
@@ -48,7 +48,6 @@ export class I18n {
 
 // ============ 翻译表 ============
 // 占位符：{name} {count} {folder} {suffix}
-// 阿拉伯语 ar 里 ASCII 字面量片段已手动加 \u200E
 
 const STRINGS: Record<Locale, Record<string, string>> = {
 
@@ -178,23 +177,6 @@ const STRINGS: Record<Locale, Record<string, string>> = {
     'settings.compact.desc': 'Remove linhas em branco entre parágrafos; um parágrafo por linha.',
     'settings.preserveHierarchy.name': 'Manter hierarquia de diretórios',
     'settings.preserveHierarchy.desc': 'Mantém a estrutura de subdiretórios do vault ao exportar (predefinição: nivelar todas as notas na subpasta do mesmo nome).',
-  },
-
-  // 阿拉伯语：所有 ASCII 字面量片段 + vars 都手动加 \u200E，避免 BIDI 错乱
-  ar: {
-    'menu.title': 'تصدير إلى ‎TXT‎',
-    'notice.exportedFile': 'تم التصدير: ‎{name}‎',
-    'notice.exportedFolder': 'تم تصدير ‎{count}‎ ملفًا → ‎{folder}‎{suffix}',
-    'suffix.preserveHierarchy': ' (الاحتفاظ بالتسلسل الهرمي)',
-    'settings.header': 'اضبط معالجة المحتوى عند التصدير إلى ‎TXT‎. انقر بزر الفأرة الأيمن على ملف أو مجلد للتصدير.',
-    'settings.stripFrontmatter.name': 'إزالة الـ ‎frontmatter‎',
-    'settings.stripFrontmatter.desc': 'احذف الـ ‎frontmatter‎ بصيغة ‎YAML‎ (‎--- ... ---‎) عند التصدير.',
-    'settings.stripMarkdown.name': 'إزالة تنسيق ‎markdown‎',
-    'settings.stripMarkdown.desc': 'احذف العناوين ‎#‎، والـ ‎**غامق**‎، وروابط ‎[]()‎، وغيرها من رموز التنسيق.',
-    'settings.compact.name': 'بدون أسطر فارغة بين الفقرات (مدمج)',
-    'settings.compact.desc': 'احذف الأسطر الفارغة بين الفقرات؛ فقرة واحدة في كل سطر.',
-    'settings.preserveHierarchy.name': 'الاحتفاظ بالتسلسل الهرمي للمجلدات',
-    'settings.preserveHierarchy.desc': 'احتفظ ببنية المجلدات الفرعية في الخزنة عند التصدير (افتراضيًا: تسطيح جميع الملاحظات في المجلد الفرعي الذي يحمل الاسم نفسه).',
   },
 
   it: {

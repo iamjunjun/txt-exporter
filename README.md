@@ -45,7 +45,7 @@ vault/杜十娘/
 
 界面字符串（右键菜单、Notice 通知、设置面板）会根据 Obsidian 的语言设置**自动切换**，不再中英并列。
 
-支持 12 种语言：
+支持 11 种语言：
 
 | 语言 | 代码 |
 |---|---|
@@ -57,12 +57,11 @@ vault/杜十娘/
 | Français | `fr` |
 | Español | `es` |
 | Português | `pt` |
-| العربية | `ar`（RTL） |
 | Italiano | `it` |
 | ไทย | `th` |
 | Tiếng Việt | `vi` |
 
-未列出的语言 fallback 到英语。阿拉伯语走 RTL，所有 ASCII 字面量（如 `TXT`、`YAML`、`#`、`**`）和 vars（数字、路径）已用 LRM marker 处理 BIDI 排版，不会乱。
+未列出的语言 fallback 到英语。
 
 ### 安装
 
@@ -152,7 +151,7 @@ Previously, inline HTML tags (e.g. `<font style="color:#DF2A3F;">red</font>`) we
 
 UI strings (right-click menu, Notice messages, settings panel) now **automatically switch** to match your Obsidian language setting — no more bilingual "Chinese | English" labels.
 
-12 languages supported: Chinese, English, Japanese, Korean, German, French, Spanish, Portuguese, Arabic (RTL), Italian, Thai, Vietnamese. Any other language falls back to English. Arabic strings use LRM markers on ASCII fragments (`TXT`, `YAML`, `#`, `**`, numbers, paths) to keep BIDI layout correct.
+11 languages supported: Chinese, English, Japanese, Korean, German, French, Spanish, Portuguese, Italian, Thai, Vietnamese. Any other language falls back to English.
 
 ### Installation
 

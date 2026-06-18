@@ -88,7 +88,7 @@ export default class TxtExporterPlugin extends Plugin {
   // 简易 markdown 剥离
   stripMarkdown(md: string): string {
     return md
-      .replace(/```[\s\S]*?```/g, '')                      // 代码块
+      .replace(/^```[\w]*\s*$/gm, '')                      // 代码块：去掉 ``` 标记行，保留内容
       .replace(/`([^`]+)`/g, '$1')                          // 行内代码
       .replace(/<br\s*\/?>/gi, '\n')                        // <br> → 换行
       .replace(/<[^>]+>/g, '')                              // 其他 HTML 标签（<font color>、<span>、<mark> 等）
